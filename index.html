@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AgriGuard AI - Real-time AI Crop Health Diagnosis and Weather-Aware Climate Advisory for Farmers.">
+    <title>AgriGuard AI — AI Crop Doctor & Climate Advisory</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        <path d="M12 22V12" stroke-linecap="round"/>
+                        <circle cx="12" cy="7" r="1.5" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">AgriGuard <span class="accent-tag">AI</span></span>
+                    <span class="brand-tagline" data-i18n="tagline">AI Crop Doctor & Climate Advisory</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="status-pill" id="api-status-pill" title="System API & Fallback Status">
+                    <span class="status-dot online"></span>
+                    <span id="api-status-text">Weather API Connected</span>
+                </div>
+
+                <!-- Language Selector -->
+                <div class="lang-selector-wrapper">
+                    <svg class="lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <select id="language-select" aria-label="Select Language">
+                        <option value="en">English (EN)</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="te">తెలుగు (Telugu)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-outline btn-sm" id="history-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span data-i18n="historyBtn">Advisory History</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- Hero Banner -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="pulse-spark"></span>
+                    <span data-i18n="heroBadge">Real-time Field to Climate Advisory Engine</span>
+                </div>
+                <h1 data-i18n="heroTitle">Turn Field Conditions Into Smarter Farm Decisions</h1>
+                <p data-i18n="heroDesc">
+                    Upload a leaf photo, detect crop disease with computer vision, and get weather-smart spraying windows to maximize harvest yields and avoid chemical waste.
+                </p>
+                <div class="hero-highlights">
+                    <div class="highlight-item">
+                        <svg class="h-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span data-i18n="h1">95%+ Vision Accuracy</span>
+                    </div>
+                    <div class="highlight-item">
+                        <svg class="h-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                        <span data-i18n="h2">Live Climate Safety Alerts</span>
+                    </div>
+                    <div class="highlight-item">
+                        <svg class="h-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span data-i18n="h3">Optimal Action Timing</span>
+                    </div>
+                </div>
+                <a href="#input-section" class="btn btn-primary btn-lg" id="hero-cta-btn">
+                    <span data-i18n="analyzeMyCrop">Analyze My Crop</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- 3-Step Input Section -->
+        <section class="input-card-container" id="input-section">
+            <div class="section-header">
+                <span class="step-indicator-title" data-i18n="stepTitle">FIELD DATA INPUT</span>
+                <h2 data-i18n="stepSubtitle">3 Simple Steps to Actionable Agronomic Guidance</h2>
+            </div>
+
+            <div class="steps-grid">
+                
+                <!-- STEP 1: CROP LEAF IMAGE -->
+                <div class="step-card active" id="step-1-card">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h3 data-i18n="step1Title">Upload Crop Leaf Image</h3>
+                            <p class="step-desc" data-i18n="step1Desc">Take a clear photo of the infected leaf surface.</p>
+                        </div>
+                    </div>
+
+                    <!-- Dropzone -->
+                    <div class="upload-dropzone" id="dropzone">
+                        <input type="file" id="leaf-image-input" accept="image/*" class="file-input-hidden">
+                        
+                        <div class="dropzone-empty" id="dropzone-empty">
+                            <div class="upload-icon-wrapper">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                                </svg>
+                            </div>
+                            <p class="dropzone-text"><strong data-i18n="dragText">Drag & Drop Leaf Image</strong> <span data-i18n="orText">or</span></p>
+                            <div class="button-group">
+                                <button class="btn btn-secondary btn-sm" id="browse-btn" type="button">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    <span data-i18n="browseFile">Browse File</span>
+                                </button>
+                                <button class="btn btn-primary-light btn-sm" id="camera-btn" type="button">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                                    <span data-i18n="useCamera">Use Camera</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Image Preview State -->
+                        <div class="image-preview-wrapper hidden" id="preview-wrapper">
+                            <img id="image-preview" src="" alt="Crop Leaf Preview">
+                            <div class="preview-overlay-info">
+                                <span class="badge badge-success" id="preview-filename">leaf_sample.png</span>
+                                <button class="btn-icon btn-danger-icon" id="remove-image-btn" title="Remove Image">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Demo Presets Picker -->
+                    <div class="demo-presets-container">
+                        <div class="presets-label">
+                            <span data-i18n="orSelectPreset">Or test with a sample field crop:</span>
+                        </div>
+                        <div class="preset-cards-grid">
+                            <button type="button" class="preset-chip active" data-preset="tomato">
+                                <span class="preset-img-thumb" style="background-image: url('assets/tomato_early_blight.png');"></span>
+                                <div class="preset-info">
+                                    <strong>Tomato</strong>
+                                    <span>Early Blight</span>
+                                </div>
+                            </button>
+                            <button type="button" class="preset-chip" data-preset="rice">
+                                <span class="preset-img-thumb" style="background-image: url('assets/rice_leaf_blast.png');"></span>
+                                <div class="preset-info">
+                                    <strong>Rice</strong>
+                                    <span>Leaf Blast</span>
+                                </div>
+                            </button>
+                            <button type="button" class="preset-chip" data-preset="corn">
+                                <span class="preset-img-thumb" style="background-image: url('assets/corn_common_rust.png');"></span>
+                                <div class="preset-info">
+                                    <strong>Corn</strong>
+                                    <span>Common Rust</span>
+                                </div>
+                            </button>
+                            <button type="button" class="preset-chip" data-preset="healthy">
+                                <span class="preset-img-thumb" style="background-image: url('assets/healthy_leaf.png');"></span>
+                                <div class="preset-info">
+                                    <strong>Apple / Crop</strong>
+                                    <span>Healthy Leaf</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- STEP 2: FARMER LOCATION -->
+                <div class="step-card" id="step-2-card">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h3 data-i18n="step2Title">Farmer Location & Climate Signals</h3>
+                            <p class="step-desc" data-i18n="step2Desc">Provide location to pull live rainfall & wind velocity.</p>
+                        </div>
+                    </div>
+
+                    <div class="location-input-group">
+                        <div class="input-with-icon">
+                            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <input type="text" id="location-search-input" placeholder="Enter Village, Town, or District..." value="Nagpur, Maharashtra" aria-label="Location search">
+                        </div>
+                        <button class="btn btn-secondary" id="geo-btn" type="button">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                            <span data-i18n="useMyLocation">Use My Location</span>
+                        </button>
+                    </div>
+
+                    <!-- Preset Locations Quick Tags -->
+                    <div class="location-quick-tags">
+                        <span class="tag-label" data-i18n="quickLoc">Popular Ag Belts:</span>
+                        <button type="button" class="loc-chip" data-city="Nagpur" data-lat="21.1458" data-lon="79.0882">Nagpur (India)</button>
+                        <button type="button" class="loc-chip" data-city="Ludhiana" data-lat="30.9010" data-lon="75.8573">Ludhiana (Punjab)</button>
+                        <button type="button" class="loc-chip" data-city="Hyderabad" data-lat="17.3850" data-lon="78.4867">Hyderabad (TS)</button>
+                        <button type="button" class="loc-chip" data-city="Fresno" data-lat="36.7468" data-lon="-119.7726">Fresno (USA)</button>
+                    </div>
+
+                    <!-- Selected Location Card -->
+                    <div class="selected-location-card" id="location-display-card">
+                        <div class="loc-card-header">
+                            <div class="loc-details">
+                                <span class="loc-city-name" id="loc-name-display">Nagpur, Maharashtra</span>
+                                <span class="loc-coords" id="loc-coords-display">Lat: 21.1458° N, Lon: 79.0882° E</span>
+                            </div>
+                            <div class="weather-mini-pill" id="weather-mini-pill">
+                                <span class="w-icon" id="mini-weather-icon">⛅</span>
+                                <span class="w-temp" id="mini-weather-temp">28°C</span>
+                            </div>
+                        </div>
+                        <div class="loc-forecast-preview" id="loc-forecast-summary">
+                            <span>Forecast signal: <strong id="mini-forecast-text">Moderate rain expected in 3 hrs</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: ANALYZE CTA -->
+                <div class="step-card action-step-card" id="step-3-card">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div>
+                            <h3 data-i18n="step3Title">Run AI & Climate Advisory</h3>
+                            <p class="step-desc" data-i18n="step3Desc">Combines computer vision with weather risk rules.</p>
+                        </div>
+                    </div>
+
+                    <div class="cta-box">
+                        <div class="cta-feature-list">
+                            <div class="cta-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="f1">Pathogen Symptom Extraction</span></div>
+                            <div class="cta-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="f2">Rain Wash-off & Wind Drift Risk</span></div>
+                            <div class="cta-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="f3">Safe Spraying Time Window</span></div>
+                        </div>
+
+                        <button class="btn btn-accent btn-xl pulse-animation" id="analyze-btn" type="button">
+                            <svg class="btn-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+                            <span data-i18n="analyzeBtn">ANALYZE CROP & WEATHER</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Loading & Analysis Scanning Overlay (Modal Style) -->
+        <div class="loading-overlay hidden" id="loading-overlay" aria-live="polite">
+            <div class="scanning-card">
+                <div class="scanner-image-container">
+                    <img id="scanner-preview-img" src="assets/tomato_early_blight.png" alt="Analyzing Leaf">
+                    <div class="laser-beam"></div>
+                    <div class="scan-grid-overlay"></div>
+                </div>
+                
+                <h3 class="scanning-title" data-i18n="analyzingTitle">Analyzing Field Conditions...</h3>
+
+                <!-- Multi-Step Progress Tracker -->
+                <div class="scanning-steps-list">
+                    <div class="scan-step active" id="scan-step-1">
+                        <span class="scan-status-icon">🔄</span>
+                        <span data-i18n="scan1">Scanning leaf image visual patterns & spots...</span>
+                    </div>
+                    <div class="scan-step" id="scan-step-2">
+                        <span class="scan-status-icon">⏳</span>
+                        <span data-i18n="scan2">Classifying pathogen & severity index...</span>
+                    </div>
+                    <div class="scan-step" id="scan-step-3">
+                        <span class="scan-status-icon">⏳</span>
+                        <span data-i18n="scan3">Fetching real-time weather & 24h hourly forecast...</span>
+                    </div>
+                    <div class="scan-step" id="scan-step-4">
+                        <span class="scan-status-icon">⏳</span>
+                        <span data-i18n="scan4">Evaluating climate safety window (rain, wind, humidity)...</span>
+                    </div>
+                    <div class="scan-step" id="scan-step-5">
+                        <span class="scan-status-icon">⏳</span>
+                        <span data-i18n="scan5">Generating actionable farmer advisory...</span>
+                    </div>
+                </div>
+
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="scan-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTS DASHBOARD SECTION -->
+        <section class="results-dashboard hidden" id="results-section">
+            
+            <!-- Weather & Risk Alert Bar -->
+            <div class="alert-banner alert-warning" id="weather-alert-banner">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <strong id="alert-title" data-i18n="alertRainTitle">Rainfall Alert Expected Soon</strong>
+                    <p id="alert-desc">Weather forecast indicates rain probability > 65% within 4 hours. Chemical pesticide application should be delayed to avoid wash-off.</p>
+                </div>
+            </div>
+
+            <!-- KEY DIFFERENTIATOR: SMART ACTION WINDOW CARD -->
+            <div class="smart-window-card" id="smart-action-card">
+                <div class="window-header">
+                    <div class="window-badge-wrapper">
+                        <span class="badge badge-accent" data-i18n="smartBadge">KEY AGRONOMIC ADVISORY</span>
+                        <span class="action-status-tag status-danger" id="action-status-badge">⚠️ DO NOT SPRAY TODAY</span>
+                    </div>
+                    <h2 class="window-title" data-i18n="recommendedWindowHeading">RECOMMENDED ACTION WINDOW</h2>
+                </div>
+
+                <div class="window-body">
+                    <div class="optimal-time-box">
+                        <div class="time-clock-icon">🕒</div>
+                        <div class="time-details">
+                            <span class="time-label" data-i18n="bestTimeLabel">Best Time to Spray / Treat:</span>
+                            <span class="time-value" id="action-recommended-time">Tomorrow · 6:00 AM – 9:00 AM</span>
+                        </div>
+                    </div>
+
+                    <!-- Weather Conditions Grid for Window -->
+                    <div class="window-metrics-grid">
+                        <div class="metric-box">
+                            <span class="metric-icon">🌧️</span>
+                            <div class="metric-info">
+                                <span class="m-label" data-i18n="rainProb">Rain Probability</span>
+                                <strong class="m-val" id="win-rain-prob">8% (Safe &lt; 20%)</strong>
+                            </div>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-icon">💨</span>
+                            <div class="metric-info">
+                                <span class="m-label" data-i18n="windSpeed">Wind Speed</span>
+                                <strong class="m-val" id="win-wind-speed">7 km/h (Safe &lt; 15)</strong>
+                            </div>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-icon">💧</span>
+                            <div class="metric-info">
+                                <span class="m-label" data-i18n="humidity">Relative Humidity</span>
+                                <strong class="m-val" id="win-humidity">64% (Ideal 50-70%)</strong>
+                            </div>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-icon">🌡️</span>
+                            <div class="metric-info">
+                                <span class="m-label" data-i18n="temp">Temperature</span>
+                                <strong class="m-val" id="win-temp">23°C (Optimal)</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rationale Box -->
+                    <div class="window-reason-box">
+                        <div class="reason-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <span data-i18n="whyThisWindow">Agronomic Rationale & Safety Criteria:</span>
+                        </div>
+                        <p class="reason-text" id="action-reason-text">
+                            Applying treatment tomorrow morning ensures at least 6 hours of dry leaf surface for maximum fungicide absorption. Low wind velocity (&lt; 10 km/h) prevents chemical spray drift into neighboring fields.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DASHBOARD GRID CONTENT -->
+            <div class="dashboard-grid">
+                
+                <!-- CARD 1: CROP HEALTH & AI DIAGNOSIS -->
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" class="card-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <h3 data-i18n="cropHealthTitle">Crop Diagnosis & Symptoms</h3>
+                        <span class="risk-badge risk-high" id="crop-risk-badge">HIGH RISK</span>
+                    </div>
+
+                    <div class="diagnosis-body">
+                        <div class="analyzed-image-box">
+                            <img id="result-leaf-image" src="assets/tomato_early_blight.png" alt="Analyzed Crop Leaf">
+                            <div class="bounding-box" id="bounding-box-overlay">
+                                <span class="box-tag" id="box-tag-label">Lesion #1 (Early Blight)</span>
+                            </div>
+                        </div>
+
+                        <div class="diagnosis-summary">
+                            <div class="diag-header-row">
+                                <div>
+                                    <span class="crop-category" id="res-crop-name">Solanum lycopersicum (Tomato)</span>
+                                    <h4 class="disease-name" id="res-disease-name">Early Blight (Alternaria solani)</h4>
+                                </div>
+                                <div class="confidence-pill">
+                                    <span class="conf-num" id="res-confidence-num">94%</span>
+                                    <span class="conf-lbl" data-i18n="confidence">Confidence</span>
+                                </div>
+                            </div>
+
+                            <div class="confidence-bar-wrapper">
+                                <div class="confidence-bar-fill" id="res-confidence-bar" style="width: 94%;"></div>
+                            </div>
+
+                            <!-- Visible Symptoms List -->
+                            <div class="symptoms-section">
+                                <h5 data-i18n="symptomsTitle">Detected Symptoms:</h5>
+                                <ul class="symptoms-list" id="res-symptoms-list">
+                                    <li>Brown circular concentric target-board lesions</li>
+                                    <li>Yellowing halos around spots on lower foliage</li>
+                                    <li>Progressive leaf wilting & stem spot development</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2: ACTIONABLE TREATMENT PLAN -->
+                <div class="dash-card">
+                    <div class="card-title-bar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" class="card-icon"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        <h3 data-i18n="treatmentTitle">Agronomic Action Plan</h3>
+                    </div>
+
+                    <div class="treatment-body">
+                        
+                        <div class="treatment-block block-immediate">
+                            <div class="block-title">
+                                <span class="block-icon">🚨</span>
+                                <strong data-i18n="immediateAction">Immediate Field Actions:</strong>
+                            </div>
+                            <p id="res-immediate-text">Prune and burn severely affected lower leaves immediately to prevent fungal spore distribution across neighboring plants.</p>
+                        </div>
+
+                        <div class="treatment-block block-recommendation">
+                            <div class="block-title">
+                                <span class="block-icon">🧪</span>
+                                <strong data-i18n="recommendedTreatment">Recommended Treatment:</strong>
+                            </div>
+                            <p id="res-treatment-text">Apply copper-based fungicide or Chlorothalonil at recommended dilution. Organic alternative: Spray neem oil extract (5ml/L) or Bacillus subtilis solution.</p>
+                        </div>
+
+                        <div class="treatment-block block-preventive">
+                            <div class="block-title">
+                                <span class="block-icon">🛡️</span>
+                                <strong data-i18n="preventiveMeasures">Preventive Measures:</strong>
+                            </div>
+                            <ul class="clean-bullet-list" id="res-preventive-list">
+                                <li>Ensure wider crop spacing (60cm) to promote canopy airflow.</li>
+                                <li>Practice 3-year crop rotation with non-solanaceous crops.</li>
+                                <li>Use drip irrigation instead of overhead sprinklers.</li>
+                            </ul>
+                        </div>
+
+                        <div class="treatment-block block-avoid">
+                            <div class="block-title">
+                                <span class="block-icon">🚫</span>
+                                <strong data-i18n="thingsToAvoid">Things to Avoid:</strong>
+                            </div>
+                            <p id="res-avoid-text">Avoid high-nitrogen synthetic fertilizers during active infection as it soft-stimulates vulnerable leaf tissue.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- CARD 3: LIVE WEATHER INTELLIGENCE & 24H FORECAST -->
+                <div class="dash-card full-width-card">
+                    <div class="card-title-bar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" class="card-icon"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                        <h3 data-i18n="weatherTitle">Live Climate Intelligence & 24-Hour Hourly Forecast</h3>
+                        <span class="loc-tag" id="res-weather-loc">Nagpur, MH</span>
+                    </div>
+
+                    <div class="weather-dashboard-body">
+                        <!-- Current Weather Left Panel -->
+                        <div class="current-weather-panel">
+                            <div class="curr-temp-large">
+                                <span class="weather-big-icon" id="res-w-icon">⛅</span>
+                                <div>
+                                    <span class="temp-num" id="res-w-temp">28°C</span>
+                                    <span class="condition-text" id="res-w-condition">Partly Cloudy</span>
+                                </div>
+                            </div>
+                            <div class="curr-weather-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label" data-i18n="rainProbShort">Rain Prob:</span>
+                                    <strong class="stat-val" id="res-w-rain">65%</strong>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label" data-i18n="humidityShort">Humidity:</span>
+                                    <strong class="stat-val" id="res-w-hum">72%</strong>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label" data-i18n="windShort">Wind Speed:</span>
+                                    <strong class="stat-val" id="res-w-wind">14 km/h</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 24H Hourly Scroll Forecast -->
+                        <div class="hourly-forecast-container">
+                            <h5 data-i18n="hourlyTitle">24-Hour Action Window Forecast:</h5>
+                            <div class="hourly-cards-scroll" id="hourly-forecast-list">
+                                <!-- JS inserts 24 hourly cards here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- DASHBOARD ACTIONS -->
+            <div class="dashboard-actions-bar">
+                <button class="btn btn-secondary" id="save-history-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    <span data-i18n="saveAdvisory">Save Advisory</span>
+                </button>
+                <button class="btn btn-outline" id="print-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    <span data-i18n="printReport">Print / Export PDF</span>
+                </button>
+                <button class="btn btn-primary" id="reanalyze-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/></svg>
+                    <span data-i18n="analyzeNewCrop">Analyze Another Crop</span>
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Camera Capture Modal -->
+    <div class="modal-overlay hidden" id="camera-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>📷 Live Leaf Camera Scanner</h3>
+                <button class="btn-close" id="close-camera-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="webcam-viewport">
+                    <video id="webcam-stream" autoplay playsinline></video>
+                    <canvas id="camera-canvas" class="hidden"></canvas>
+                    <div class="camera-guide-box">
+                        <span>Position disease area inside box</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="switch-cam-btn">Flip Camera</button>
+                <button class="btn btn-accent btn-lg" id="snap-photo-btn">📸 Capture Photo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal / Drawer -->
+    <div class="modal-overlay hidden" id="history-modal">
+        <div class="modal-card large-modal">
+            <div class="modal-header">
+                <h3>📋 Farmer Advisory History</h3>
+                <button class="btn-close" id="close-history-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-subtitle">Saved crop diagnoses & climate advisories on this device:</p>
+                <div class="history-list" id="history-items-list">
+                    <!-- Dynamic history items -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger-outline" id="clear-history-btn">Clear History</button>
+                <button class="btn btn-secondary" id="close-history-modal-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <strong>AgriGuard AI</strong> — Empowering Smallholder Farmers with AI & Climate Resilience.
+            </div>
+            <div class="footer-disclaimer">
+                ⚠️ Advisory recommendations are based on rule-based agronomic models and Open-Meteo weather intelligence. Always follow local agricultural extension directives.
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
